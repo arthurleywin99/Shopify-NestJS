@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CommonService } from './common.service';
-import { DefinedException } from 'src/utils/exceptions';
+import { DefinedException } from 'src/core/utils/exceptions';
 import { Request } from 'express';
 
 @Controller('common')

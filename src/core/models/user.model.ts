@@ -3,5 +3,5 @@ export class User {
   password: string;
   avatar: string | null;
   phoneNumber: string;
-  email: string | null;
+  email: string;
 }

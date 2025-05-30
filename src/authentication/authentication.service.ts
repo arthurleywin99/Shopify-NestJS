@@ -3,8 +3,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { User } from 'src/user/user.model';
-import { CreateUserSchema } from 'src/user/user.schema';
+import { User } from 'src/core/models/user.model';
+import {
+  CreateUserSchema,
+  LoginUserSchema,
+} from 'src/core/schemas/user.schema';
 
 @Injectable()
 export class AuthenticationService {
@@ -44,5 +47,27 @@ export class AuthenticationService {
     );
     await fs.promises.writeFile(uploadPath, file.buffer);
     return uploadPath;
+  }
+
+  async login({
+    email,
+    password,
+  }: LoginUserSchema): Promise<Omit<User, 'password'> | null> {
+    const user = await this.prismaService.user.findUnique({
+      where: { email },
+    });
+
+    if (user) {
+      const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordMatch) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...userWithoutPassword } = user;
+
+        return userWithoutPassword;
+      }
+    }
+
+    return null;
   }
 }
