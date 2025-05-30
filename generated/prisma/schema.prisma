@@ -5,8 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../generated/prisma"
+  binaryTargets = ["native", "darwin", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -19,7 +20,7 @@ model User {
   password    String
   avatar      String?
   phoneNumber String  @map("phone_number")
-  email       String? @unique
+  email       String  @unique
 
   @@map("users")
 }
