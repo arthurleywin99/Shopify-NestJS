@@ -1039,7 +1039,7 @@ export namespace Prisma {
     password: string
     avatar: string | null
     phoneNumber: string
-    email: string | null
+    email: string
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1103,7 +1103,7 @@ export namespace Prisma {
       password: string
       avatar: string | null
       phoneNumber: string
-      email: string | null
+      email: string
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2005,7 +2005,7 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     avatar?: StringNullableFilter<"User"> | string | null
     phoneNumber?: StringFilter<"User"> | string
-    email?: StringNullableFilter<"User"> | string | null
+    email?: StringFilter<"User"> | string
   }
 
   export type UserOrderByWithRelationInput = {
@@ -2013,7 +2013,7 @@ export namespace Prisma {
     password?: SortOrder
     avatar?: SortOrderInput | SortOrder
     phoneNumber?: SortOrder
-    email?: SortOrderInput | SortOrder
+    email?: SortOrder
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -2032,7 +2032,7 @@ export namespace Prisma {
     password?: SortOrder
     avatar?: SortOrderInput | SortOrder
     phoneNumber?: SortOrder
-    email?: SortOrderInput | SortOrder
+    email?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -2048,14 +2048,14 @@ export namespace Prisma {
     password?: StringWithAggregatesFilter<"User"> | string
     avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
     phoneNumber?: StringWithAggregatesFilter<"User"> | string
-    email?: StringNullableWithAggregatesFilter<"User"> | string | null
+    email?: StringWithAggregatesFilter<"User"> | string
   }
 
   export type UserCreateInput = {
     password: string
     avatar?: string | null
     phoneNumber: string
-    email?: string | null
+    email: string
   }
 
   export type UserUncheckedCreateInput = {
@@ -2063,14 +2063,14 @@ export namespace Prisma {
     password: string
     avatar?: string | null
     phoneNumber: string
-    email?: string | null
+    email: string
   }
 
   export type UserUpdateInput = {
     password?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserUncheckedUpdateInput = {
@@ -2078,7 +2078,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserCreateManyInput = {
@@ -2086,14 +2086,14 @@ export namespace Prisma {
     password: string
     avatar?: string | null
     phoneNumber: string
-    email?: string | null
+    email: string
   }
 
   export type UserUpdateManyMutationInput = {
     password?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -2101,7 +2101,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
