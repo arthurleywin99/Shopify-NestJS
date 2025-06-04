@@ -30,6 +30,7 @@ services:
     depends_on:
       - shopify_db
       - shopify_redis
+      - shopify_minio
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
@@ -39,5 +40,19 @@ services:
       - .:/app
     command: sh -c "npx prisma migrate deploy && npm run start:prod"
 
+  shopify_minio:
+    image: minio/minio:latest
+    container_name: shopify_minio
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - shopify_minio_data:/data
+    environment:
+      - MINIO_ROOT_USER=${S3_ACCESS_KEY}
+      - MINIO_ROOT_PASSWORD=${S3_SECRET_KEY}
+    command: server /data --console-address ":9001"
+
 volumes:
   shopify-data: {}
+  shopify_minio_data: {}

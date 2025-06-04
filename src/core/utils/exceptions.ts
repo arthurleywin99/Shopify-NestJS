@@ -24,8 +24,4 @@ export class DefinedException {
   static InternalServerError500(message: string) {
     throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR);
   }
-
-  static Exception(message: string, statusCode: HttpStatus) {
-    throw new HttpException(message, statusCode);
-  }
 }

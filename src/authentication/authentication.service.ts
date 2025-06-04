@@ -1,6 +1,4 @@
 import * as bcrypt from 'bcrypt';
-import * as fs from 'fs';
-import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from 'src/core/models/user.model';
@@ -8,10 +6,14 @@ import {
   CreateUserSchema,
   LoginUserSchema,
 } from 'src/core/schemas/user.schema';
+import { MinIOService } from 'src/minio/minio.service';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly minioService: MinIOService,
+  ) {}
 
   async isValidUser(data: CreateUserSchema): Promise<boolean> {
     const existingUser = await this.prismaService.user.findUnique({
@@ -35,18 +37,14 @@ export class AuthenticationService {
     return user;
   }
 
-  async saveAvatarImage(file: Express.Multer.File): Promise<string> {
-    const filename = `${Date.now()}-${file.originalname}`;
-    const uploadPath = path.join(
-      __dirname,
-      '..',
-      '..',
-      'uploads',
-      'users',
-      filename,
-    );
-    await fs.promises.writeFile(uploadPath, file.buffer);
-    return uploadPath;
+  async saveAvatarImage(file: Express.Multer.File): Promise<{
+    key: string;
+    bucket: any;
+    url: string;
+  }> {
+    const result = await this.minioService.uploadImage(file);
+
+    return result;
   }
 
   async login({

@@ -167,11 +167,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DB_URL",
-        "value": "postgresql://admin:ch@ngeme1fyouwant@192.168.0.104:5432/shopify_db?schema=public"
+        "value": null
       }
     }
   },

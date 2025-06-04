@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -64,9 +65,9 @@ export class AuthenticationController {
       const createUserData = { ...data };
 
       if (file) {
-        const imagePath = await this.authService.saveAvatarImage(file);
+        const { url } = await this.authService.saveAvatarImage(file);
 
-        createUserData.email = imagePath;
+        createUserData.avatar = url;
       }
 
       const user = await this.authService.register(createUserData);
@@ -76,8 +77,8 @@ export class AuthenticationController {
         user,
       });
     } catch (error) {
-      AppLogger.error('Register failed', error);
-      return DefinedException.InternalServerError500('Register failed');
+      AppLogger.error('[Register]: Register failed: ', error);
+      throw error;
     }
   }
 
@@ -124,12 +125,12 @@ export class AuthenticationController {
         },
       });
     } catch (error) {
-      AppLogger.error('Login failed', error);
-      return DefinedException.InternalServerError500('Login failed');
+      AppLogger.error('[Login]: Login failed', error);
+      throw error;
     }
   }
 
-  @Post('refresh-token')
+  @Get('refresh-token')
   @UseGuards(TokenGuard)
   @HttpCode(HttpStatus.OK)
   async refreshToken(@Req() req: Request) {
@@ -160,28 +161,37 @@ export class AuthenticationController {
         },
       });
     } catch (error) {
-      AppLogger.error('Refresh token failed', error);
-      return DefinedException.InternalServerError500('Refresh token failed');
+      AppLogger.error('[RefreshToken]: Refresh token failed', error);
+      throw error;
     }
   }
 
   @Post('logout')
   @UseGuards(TokenGuard)
   @HttpCode(HttpStatus.OK)
-  async logout(@Req() req: Request, @Body() { userId }: { userId: string }) {
+  async logout(@Req() req: Request) {
     try {
       const refreshToken = req['token'];
 
-      await this.jwtTokenService.verifyRefreshToken(userId, refreshToken);
+      const payload = await this.jwtTokenService.decodeToken(refreshToken);
 
-      await this.jwtTokenService.revokeToken(userId, refreshToken);
+      if (!payload || !payload.userId) {
+        return DefinedException.Unauthenticated401('Invalid token');
+      }
+
+      await this.jwtTokenService.verifyRefreshToken(
+        payload.userId,
+        refreshToken,
+      );
+
+      await this.jwtTokenService.revokeToken(payload.userId, refreshToken);
 
       return SuccessResponse.Ok({
         message: 'Logout successfully',
       });
     } catch (error) {
-      AppLogger.error('Logout failed', error);
-      return DefinedException.InternalServerError500('Logout failed');
+      AppLogger.error('[Logout]: Logout failed', error);
+      throw error;
     }
   }
 }

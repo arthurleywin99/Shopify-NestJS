@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
+import { AppLogger } from 'src/core/utils/logger';
 
 @Module({
   imports: [],
@@ -12,14 +13,13 @@ import Redis from 'ioredis';
           host: configService.get('REDIS_HOST'),
           port: parseInt(configService.get('REDIS_PORT') || '6379', 10),
         });
-        client.on('connect', () => console.log('Redis connected'));
-        client.on('error', (err) => console.error('Redis error:', err));
+        client.on('connect', () => AppLogger.log('[Redis]: Connected'));
+        client.on('error', (err) => console.error('[Redis]: Error:', err));
         return client;
       },
       inject: [ConfigService],
     },
   ],
-
   exports: ['REDIS_CLIENT'],
 })
 export class RedisModule {}
